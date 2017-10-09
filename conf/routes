@@ -1,0 +1,19 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# https://www.playframework.com/documentation/latest/ScalaRouting
+# ~~~~
+
+# An example controller showing a sample home page
+POST    /statistics                             controllers.StatisticCRUDController.add
+GET     /statistics/:id/:start/:end             controllers.StatisticCRUDController.byResource(id, start, end)
+GET     /statistics                             controllers.StatisticCRUDController.all
+
+POST    /resources/:resourceId/resourceEntry    controllers.ResourceCRUDController.addResourceEntry(resourceId)
+POST    /resources/:resourceId/detailEntry      controllers.ResourceCRUDController.addDetailEntry(resourceId)
+GET     /resources/:resourceId                  controllers.ResourceCRUDController.byId(resourceId)
+GET     /resources/details/:resourceId          controllers.ResourceCRUDController.details(resourceId)
+POST    /resources                              controllers.ResourceCRUDController.add
+GET     /resources                              controllers.ResourceCRUDController.all
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
