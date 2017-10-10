@@ -6,7 +6,7 @@ import play.api.libs.json._
 import play.api.mvc._
 
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.{Failure, Success, Try}
+import scala.util.{Failure, Try}
 import scala.util.control.NonFatal
 
 class AbstractCRUDController(cc: ControllerComponents)(implicit ec: ExecutionContext)
