@@ -6,7 +6,7 @@ import dao.{ResourcePatternDao, ResourceVariableDao}
 import models.{ResourcePattern, ResourceVariable}
 
 @Singleton
-class ResourcePatternService @Inject()(resourcePatternDao: ResourcePatternDao, resourceVariableDao: ResourceVariableDao) {
+class ResourcePatternService @Inject()(resourcePatternDao: ResourcePatternDao, resourceVariableDao: ResourceVariableDao, resourceVariableService: ResourceVariableService) {
 
 
   def createWithVariables(resourcePattern: ResourcePattern): ResourcePattern = {
@@ -28,6 +28,12 @@ class ResourcePatternService @Inject()(resourcePatternDao: ResourcePatternDao, r
 
   def byId(id: Long): ResourcePattern = {
     resourcePatternDao.byId(id)
+  }
+
+  def delete(id: Long): Boolean = {
+    resourceVariableService.byPatternId(id).foreach(variable => resourceVariableService.delete(variable.id))
+    resourcePatternDao.delete(id)
+    true
   }
 
 }

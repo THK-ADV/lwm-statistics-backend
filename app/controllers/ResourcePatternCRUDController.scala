@@ -20,10 +20,13 @@ class ResourcePatternCRUDController @Inject()(cc: ControllerComponents, resource
       resource = protocol.toDBModel()
     } yield {
       resourcePatternService.createWithVariables(resource)
-      resource
     }
 
     jsonFutureResult(result)
+  }
+
+  def delete(id: String): Action[AnyContent] = Action {
+    jsonResult(resourcePatternService.delete(id.toLong))
   }
 
   def all(): Action[AnyContent] = Action {

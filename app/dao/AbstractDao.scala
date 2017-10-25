@@ -35,7 +35,6 @@ abstract class AbstractDao[T](cls: Class[T]) {
   /**
     * Delete.
     */
-  def delete(o: Any): Unit = Ebean.delete(o)
-
+  def delete(id: Long): Unit = Ebean.delete(cls, id)
   implicit def writesLocalDateTime: Writes[LocalDateTime] = (o: LocalDateTime) => Json.toJson(o.toString())
 }

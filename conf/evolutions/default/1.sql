@@ -36,6 +36,7 @@ create table resource_pattern (
   created                       timestamptz,
   label                         varchar(255),
   pattern                       varchar(255),
+  method                        varchar(255),
   constraint pk_resource_pattern primary key (id)
 );
 
@@ -61,8 +62,8 @@ create table statistic (
   created                       timestamptz,
   method                        varchar(255),
   description                   varchar(255),
-  before                        varchar(255),
-  after                         varchar(255),
+  payload                       varchar(255),
+  username                      varchar(255),
   constraint pk_statistic primary key (id)
 );
 

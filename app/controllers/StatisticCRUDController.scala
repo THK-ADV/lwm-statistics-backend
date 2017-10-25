@@ -4,21 +4,23 @@ import javax.inject._
 
 import dao.{DetailEntryDao, ResourceDao, ResourceEntryDao, StatisticDao}
 import models._
-import org.joda.time.DateTime
+import org.joda.time.{DateTime, LocalDateTime}
 import output.{ResourceSubValue, ResourceValue}
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc._
+import services.StatisticService
 
 import scala.collection.JavaConverters._
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class StatisticCRUDController  @Inject()(cc: ControllerComponents, statisticDao: StatisticDao, resourceDao: ResourceDao, detailEntryDao: DetailEntryDao, resourceEntryDao: ResourceEntryDao)(implicit ec: ExecutionContext)
+class StatisticCRUDController  @Inject()(cc: ControllerComponents, statisticService: StatisticService, statisticDao: StatisticDao, resourceDao: ResourceDao, detailEntryDao: DetailEntryDao, resourceEntryDao: ResourceEntryDao)(implicit ec: ExecutionContext)
   extends AbstractCRUDController(cc){
 
 
 
   def add(): Action[JsValue] = Action(parse.json).async { request =>
+
     val result = for {
       protocol <- Future.fromTry(parseRequest[StatisticProtocol](request))
       statistic = protocol.toDBModel()
@@ -34,7 +36,7 @@ class StatisticCRUDController  @Inject()(cc: ControllerComponents, statisticDao:
     jsonResult(statisticDao.all())
   }
 
-  def byResource(id:String, start: String, end: String) = Action {
+  def byResource(id:String, start:String, end:String) = Action {
 
     val resource = resourceDao.byId(id)
     val statistics = statisticDao.byResource(resource, start.toLong, end.toLong)
@@ -47,9 +49,14 @@ class StatisticCRUDController  @Inject()(cc: ControllerComponents, statisticDao:
     })
 
     jsonResult(resourceEntries)
+    NotImplemented
   }
 
   def isDetail(stat: Statistic, entry: ResourceEntry, dentry: DetailEntry): Boolean ={
     stat.description.split("/")(3).equals(entry.entryId) && stat.description.split("/")(5).endsWith(dentry.entryId)
+  }
+
+  def byPattern(id: String, view: String, start: String = DateTime.now().minusYears(1).getMillis.toString, end: String = DateTime.now().getMillis.toString): Action[AnyContent] = Action {
+    jsonResult(statisticService.byPattern(id.toLong, view, new LocalDateTime(start.toLong), new LocalDateTime(end.toLong)))
   }
 }

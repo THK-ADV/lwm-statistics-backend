@@ -5,7 +5,6 @@
 
 # An example controller showing a sample home page
 POST    /statistics                             controllers.StatisticCRUDController.add
-GET     /statistics/:id/:start/:end             controllers.StatisticCRUDController.byResource(id, start, end)
 GET     /statistics                             controllers.StatisticCRUDController.all
 
 POST    /resources/:resourceId/resourceEntry    controllers.ResourceCRUDController.addResourceEntry(resourceId)
@@ -17,9 +16,19 @@ GET     /resources                              controllers.ResourceCRUDControll
 
 
 POST    /pattern                                controllers.ResourcePatternCRUDController.add
+DELETE  /pattern/:id                            controllers.ResourcePatternCRUDController.delete(id)
 GET     /pattern/:id/variables                  controllers.ResourcePatternCRUDController.variables(id)
 GET     /pattern/:id                            controllers.ResourcePatternCRUDController.byId(id)
+GET     /pattern/:id/statistics/:view/:start/:end     controllers.StatisticCRUDController.byPattern(id, view, start, end)
 GET     /pattern                                controllers.ResourcePatternCRUDController.all
+
+POST    /variables/:id/values                   controllers.ResourceValueCRUDController.createByVariable(id)
+GET     /variables/:id/values                   controllers.ResourceValueCRUDController.byVariable(id)
+
+DELETE  /values/:id                             controllers.ResourceValueCRUDController.delete(id)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+
+
+GET     /fill                       controllers.TestCRUDController.createTestEntities
